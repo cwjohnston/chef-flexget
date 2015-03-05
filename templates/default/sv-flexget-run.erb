@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec 2>&1
+exec chpst -u <%= @options[:service_user] %> flexget -c <%= @options[:config_path] %> daemon start

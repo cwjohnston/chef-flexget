@@ -1,0 +1,10 @@
+name 'flexget'
+maintainer 'Cameron Johnston'
+maintainer_email 'cookbooks@rootdown.net'
+license 'Apache 2.0'
+description 'Installs/Configures flexget'
+long_description 'Installs/Configures flexget'
+version '0.1.0'
+
+depends 'python'
+depends 'runit'
