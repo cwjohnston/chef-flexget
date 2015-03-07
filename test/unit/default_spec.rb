@@ -22,23 +22,28 @@ describe 'flexget::default' do
       chef_run.converge(described_recipe)
     end
     it 'installs the latest version of flexget' do
-      expect(chef_run).to install_python_pip('flexget').with(:version => nil )
+      expect(chef_run).to install_python_pip('flexget').with(:version => nil)
     end
   end
 
   context 'with a value specified for the flexget version attribute' do
     before do
-      chef_run.node.override[:flexget][:version] = "3005"
+      chef_run.node.override[:flexget][:version] = '3005'
       chef_run.converge(described_recipe)
     end
     it 'installs the requested version of flexget' do
-      expect(chef_run).to install_python_pip('flexget').with(:version => "3005" )
+      expect(chef_run).to install_python_pip('flexget').with(
+        :version => '3005'
+      )
     end
   end
 
   context 'with a hash of plugin names and versions' do
     before do
-      chef_run.node.set[:flexget][:plugin_dependencies] =  { 'transmissionrpc' => nil, 'six' => '1.7.0' }
+      chef_run.node.set[:flexget][:plugin_dependencies] = {
+        'transmissionrpc' => nil,
+        'six' => '1.7.0'
+      }
       runner.converge(described_recipe)
     end
     it 'installs specified plugins' do
