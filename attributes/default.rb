@@ -12,7 +12,7 @@ default[:flexget][:service_env] = {
   'PATH' => '$PATH:/usr/local/bin'
 }
 
-default[:flexget][:data_dir_path] = '/etc/flexget'
+default[:flexget][:data_dir_path] = '/opt/flexget'
 default[:flexget][:log_dir_path] = '/var/log/flexget'
 default[:flexget][:config] = {
   :tasks => {
