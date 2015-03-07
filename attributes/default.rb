@@ -1,5 +1,5 @@
 default[:flexget][:version] = nil
-default[:flexget][:plugin_dependencies] = []
+default[:flexget][:plugin_dependencies] = {}
 default[:flexget][:service_enabled] = true
 default[:flexget][:service_user] = 'nobody'
 default[:flexget][:service_group] = value_for_platform_family(
@@ -12,7 +12,7 @@ default[:flexget][:service_env] = {
   'PATH' => '$PATH:/usr/local/bin'
 }
 
-default[:flexget][:data_dir_path] = '/etc/flexget'
+default[:flexget][:data_dir_path] = '/opt/flexget'
 default[:flexget][:log_dir_path] = '/var/log/flexget'
 default[:flexget][:config] = {
   :tasks => {

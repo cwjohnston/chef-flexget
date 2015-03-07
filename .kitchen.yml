@@ -9,6 +9,9 @@ platforms:
   - name: ubuntu-12.04
     run_list:
       - recipe[apt]
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
   - name: centos-6.4
     run_list:
       - recipe[yum]
@@ -20,4 +23,4 @@ suites:
     attributes:
       flexget:
         plugin_dependencies:
-          - transmissionrpc
+          transmissionrpc:

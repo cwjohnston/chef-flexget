@@ -12,22 +12,48 @@ describe 'flexget::default' do
   let(:chef_run) { runner.converge(described_recipe) }
   let(:service_user) { 'flexget' }
 
-  it 'installs flexget' do
-    expect(chef_run).to install_python_pip('flexget')
+  it 'creates a virtualenv' do
+    expect(chef_run).to create_python_virtualenv('/opt/flexget/env')
   end
 
-  context 'with a list of plugin dependencies' do
+  context 'without a value specified for the flexget version attribute' do
     before do
-      chef_run.node.set[:flexget][:plugin_dependencies] = ['transmissionrpc']
+      chef_run.node.override[:flexget][:version] = nil
+      chef_run.converge(described_recipe)
+    end
+    it 'installs the latest version of flexget' do
+      expect(chef_run).to install_python_pip('flexget').with(:version => nil)
+    end
+  end
+
+  context 'with a value specified for the flexget version attribute' do
+    before do
+      chef_run.node.override[:flexget][:version] = '3005'
+      chef_run.converge(described_recipe)
+    end
+    it 'installs the requested version of flexget' do
+      expect(chef_run).to install_python_pip('flexget').with(
+        :version => '3005'
+      )
+    end
+  end
+
+  context 'with a hash of plugin names and versions' do
+    before do
+      chef_run.node.set[:flexget][:plugin_dependencies] = {
+        'transmissionrpc' => nil,
+        'six' => '1.7.0'
+      }
       runner.converge(described_recipe)
     end
     it 'installs specified plugins' do
-      expect(chef_run).to install_python_pip('transmissionrpc')
+      expect(chef_run).to install_python_pip('transmissionrpc').with(:version => nil)
+      expect(chef_run).to install_python_pip('six').with(:version => '1.7.0')
     end
   end
 
   it 'creates flexget data directory' do
-    expect(chef_run).to create_directory('/etc/flexget')
+    expect(chef_run).to create_directory('/opt/flexget')
   end
 
   it 'creates flexget log directory' do
@@ -35,7 +61,7 @@ describe 'flexget::default' do
   end
 
   it 'creates flexget configuration yaml' do
-    expect(chef_run).to create_template('/etc/flexget/config.yml')
+    expect(chef_run).to create_template('/opt/flexget/config.yml')
   end
 
   context 'when runit service is enabled' do

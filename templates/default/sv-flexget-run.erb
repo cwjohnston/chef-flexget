@@ -1,4 +1,5 @@
 #!/bin/sh
 
+. <%= ::File.join(@options[:env_path], 'bin/activate') %>
 exec 2>&1
 exec chpst -u <%= @options[:service_user] %> flexget -c <%= @options[:config_path] %> daemon start
