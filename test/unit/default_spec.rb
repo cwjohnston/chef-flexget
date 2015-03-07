@@ -11,9 +11,10 @@ describe 'flexget::default' do
   let(:node) { runner.node }
   let(:chef_run) { runner.converge(described_recipe) }
   let(:service_user) { 'flexget' }
+  let(:service_env) { '/opt/flexget/env' }
 
   it 'creates a virtualenv' do
-    expect(chef_run).to create_python_virtualenv('/opt/flexget/env')
+    expect(chef_run).to create_python_virtualenv(service_env)
   end
 
   context 'without a value specified for the flexget version attribute' do
@@ -22,7 +23,9 @@ describe 'flexget::default' do
       chef_run.converge(described_recipe)
     end
     it 'installs the latest version of flexget' do
-      expect(chef_run).to install_python_pip('flexget').with(:version => nil)
+      expect(chef_run).to install_python_pip('flexget').with(
+        :version => nil, :virtualenv => service_env
+      )
     end
   end
 
@@ -33,7 +36,7 @@ describe 'flexget::default' do
     end
     it 'installs the requested version of flexget' do
       expect(chef_run).to install_python_pip('flexget').with(
-        :version => '3005'
+        :version => '3005', :virtualenv => service_env
       )
     end
   end
@@ -47,8 +50,12 @@ describe 'flexget::default' do
       runner.converge(described_recipe)
     end
     it 'installs specified plugins' do
-      expect(chef_run).to install_python_pip('transmissionrpc').with(:version => nil)
-      expect(chef_run).to install_python_pip('six').with(:version => '1.7.0')
+      expect(chef_run).to install_python_pip('transmissionrpc').with(
+        :version => nil, :virtualenv => service_env
+      )
+      expect(chef_run).to install_python_pip('six').with(
+        :version => '1.7.0', :virtualenv => service_env
+      )
     end
   end
 
