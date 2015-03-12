@@ -14,6 +14,7 @@ env_path = ::File.join(
 python_virtualenv env_path do
   owner node[:flexget][:service_user]
   group node[:flexget][:service_group]
+  options '--system-site-packages'
   action :create
 end
 
